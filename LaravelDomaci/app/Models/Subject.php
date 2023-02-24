@@ -10,6 +10,13 @@ class Subject extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
+        'acronym',
+        'ESPB',
+        'type'
     ];
+
+    public function evaluation(){
+        return $this->hasMany(Evaluation::class);
+    }
 }

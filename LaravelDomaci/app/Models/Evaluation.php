@@ -11,6 +11,20 @@ class Evaluation extends Model
 
     protected $fillable = [
         'student_id',
-        'subject_id'
+        'subject_id',
+        'evaluated_at',
+        'profesor_id'
     ];
+
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
+
+    public function subject(){
+        return $this->belongsTo(Subject::class);
+    }
+    
+    public function profesor(){
+        return $this->belongsTo(Profesor::class);
+    }
 }

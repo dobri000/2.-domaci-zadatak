@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +24,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::resource('products', ProductController::class);
+
+Route::resource('/products', ProductController::class);
+
+Route::resource('/orders', OrderController::class);
+
+Route::get('/customers', [CustomerController::class, 'index']);
+Route::get('/customers/{id}', [CustomerController::class, 'show']);
+Route::delete('/customers/{id}', [CustomersController::class, 'destory']);
+
+
 
 
 

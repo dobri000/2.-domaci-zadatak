@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CustomerCollection;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::all();
+        return new CustomerCollection($customers);
     }
 
     /**
@@ -34,9 +37,10 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show(int $id)
     {
-        //
+        $customer = Customer::find($id);
+        return new CustomerResource($customer);
     }
 
     /**
@@ -58,8 +62,10 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy(int $id)
     {
-        //
+        $customer = Customer::find($id);
+        $customer->delete();
+        return new CustomerResource($customer);
     }
 }

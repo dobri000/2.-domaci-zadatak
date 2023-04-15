@@ -10,6 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $filable = [
+        'id',
         'product_name',
         'price'
     ];

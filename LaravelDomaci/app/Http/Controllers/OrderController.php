@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderCollection;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+        return new OrderCollection($orders);
     }
 
     /**
@@ -34,9 +37,10 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(int $id)
     {
-        //
+        $order = Order::find($id);
+        return new OrderResource($order);
     }
 
     /**
@@ -58,8 +62,10 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function destroy(int $id)
     {
-        //
+        $order = Order::find($id);
+        $order->delete();
+        return new OrderResource($order);
     }
 }

@@ -12,8 +12,18 @@ class CustomerResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+
+     public static $wrap = 'customer';
+
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->resource->id,
+            'firstname' => $this->resource->firstname,
+            'lastname' => $this->resource->lastname,
+            'birth' => $this->resource->birth,
+            'email' => $this->resource->email,
+            'address' => $this->resource->address
+        ];
     }
 }

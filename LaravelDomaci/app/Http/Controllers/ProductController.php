@@ -38,9 +38,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(int $id)
     {
-        //
+        $product = Product::find($id);
+        return new ProductResource($product);
     }
 
     /**
@@ -62,8 +63,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(int $id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+        return new ProductResource($product);
     }
 }

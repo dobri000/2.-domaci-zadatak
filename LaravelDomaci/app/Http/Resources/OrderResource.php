@@ -12,8 +12,16 @@ class OrderResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+
+    public static $wrap = 'order';
+
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->resource->id,
+            'customer' => new CustomerResource($this->resource->customer),
+            'product' => new ProductResource($this->resource->product),
+            'quantity' => $this->resource->quantity
+        ];
     }
 }

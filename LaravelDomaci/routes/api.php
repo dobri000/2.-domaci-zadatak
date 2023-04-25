@@ -28,13 +28,25 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 
-Route::resource('/products', ProductController::class);
 
-Route::resource('/orders', OrderController::class);
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
+
+Route::resource('/orders', OrderController::class)->only(['index', 'show']);
 
 Route::get('/customers', [CustomerController::class, 'index']);
-Route::get('/customers/{id}', [CustomerController::class, 'show']);
-Route::delete('/customers/{id}', [CustomersController::class, 'destory']);
+Route::get('/customers/{customers}', [CustomerController::class, 'show']);
+
+
+Route::group(['middleware' => ['auth:sanctum']], function(){
+
+    Route::resource('/products', ProductController::class)->only('store', 'destroy', 'update');
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::delete('/customers/{id}', [CustomersController::class, 'destory']);
+
+});
 
 
 

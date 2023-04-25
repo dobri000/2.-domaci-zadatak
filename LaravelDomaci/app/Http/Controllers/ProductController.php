@@ -6,6 +6,7 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -24,7 +25,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        Product::truncate();
+        Product::factory()->create();
     }
 
     /**
@@ -32,15 +34,30 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'product_name'=>'required|string|max:100',
+            'price'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $product = new Product();
+        $product->product_name = $request->product_name;
+        $product->price = $request->price;
+        $product->save();
+
+        return response()->json(['Produkt je napravljen',
+        new ProductResource($product)]);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Product $product)
     {
-        $product = Product::find($id);
         return new ProductResource($product);
     }
 
@@ -57,16 +74,30 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'product_name'=>'required|string|max:100',
+            'price'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $product->product_name = $request->product_name;
+        $product->price = $request->price;
+        $product->save();
+        return response()->json(['Produkt je azuriran',
+        new ProductResource($product)]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Product $product)
     {
-        $product = Product::find($id);
         $product->delete();
-        return new ProductResource($product);
+        return response()->json(['Produkt je obrisan',
+        new ProductResource($product)]);
     }
 }

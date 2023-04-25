@@ -25,8 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        Product::truncate();
-        Product::factory()->create();
+        //
     }
 
     /**

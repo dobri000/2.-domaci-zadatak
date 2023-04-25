@@ -4,10 +4,8 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,19 +30,20 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
 
-Route::resource('/orders', OrderController::class)->only(['index', 'show']);
+Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/orders/{order}', [OrderController::class, 'show']);
 
 Route::get('/customers', [CustomerController::class, 'index']);
-Route::get('/customers/{customers}', [CustomerController::class, 'show']);
+Route::get('/customers/{customer}', [CustomerController::class, 'show']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::resource('/products', ProductController::class)->only('store', 'destroy', 'update');
+    Route::resource('/orders', OrderController::class)->only('store', 'destroy', 'update');
+    Route::resource('/customers', CustomerController::class)->only('store', 'destroy', 'update');
 
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::delete('/customers/{id}', [CustomersController::class, 'destory']);
 
 });
 

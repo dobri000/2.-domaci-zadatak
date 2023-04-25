@@ -6,6 +6,7 @@ use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -31,15 +32,31 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'customer_id'=>'required',
+            'product_id'=>'required',
+            'quantity'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $order = new Order();
+        $order->customer_id = $request->customer_id;
+        $order->product_id = $request->product_id;
+        $order->quantity = $request->quantity;
+        $order->save();
+
+        return response()->json(['Proudzbina je napravljena',
+        new OrderResource($order)]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Order $order)
     {
-        $order = Order::find($id);
         return new OrderResource($order);
     }
 
@@ -56,16 +73,32 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'customer_id'=>'required',
+            'product_id'=>'required',
+            'quantity'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $order->customer_id = $request->customer_id;
+        $order->product_id = $request->product_id;
+        $order->quantity = $request->quantity;
+        $order->save();
+
+        return response()->json(['Proudzbina je azurirana',
+        new OrderResource($order)]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Order $order)
     {
-        $order = Order::find($id);
         $order->delete();
-        return new OrderResource($order);
+        return response()->json(['Proudzbina je obrisana',
+        new OrderResource($order)]);
     }
 }

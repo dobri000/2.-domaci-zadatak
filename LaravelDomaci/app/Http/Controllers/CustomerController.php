@@ -6,6 +6,7 @@ use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -31,15 +32,35 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'firstname'=>'required|string|max:100',
+            'lastname'=>'required|string|max:100',
+            'birth'=>'required',
+            'email'=>'required|email',
+            'address'=>'required|string|max:100'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $customer = new Customer();
+        $customer->firstname = $request->firstname;
+        $customer->lastname = $request->lastname;
+        $customer->birth = $request->birth;
+        $customer->email = $request->email;
+        $customer->address = $request->address;
+        $customer->save();
+
+        return response()->json(['Kupac je napravljen',
+        new CustomerResource($customer)]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Customer $customer)
     {
-        $customer = Customer::find($id);
         return new CustomerResource($customer);
     }
 
@@ -56,16 +77,37 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'firstname'=>'required|string|max:100',
+            'lastname'=>'required|string|max:100',
+            'birth'=>'required',
+            'email'=>'required|email',
+            'address'=>'required|string|max:100'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $customer->firstname = $request->firstname;
+        $customer->lastname = $request->lastname;
+        $customer->birth = $request->birth;
+        $customer->email = $request->email;
+        $customer->address = $request->address;
+        $customer->save();
+
+        return response()->json(['Kupac je azuriran',
+        new CustomerResource($customer)]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Customer $customer)
     {
-        $customer = Customer::find($id);
         $customer->delete();
-        return new CustomerResource($customer);
+        
+        return response()->json(['Kupac je obrisan',
+        new CustomerResource($customer)]);
     }
 }

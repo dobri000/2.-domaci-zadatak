@@ -41,7 +41,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::resource('/products', ProductController::class)->only('store', 'destroy', 'update');
     Route::resource('/orders', OrderController::class)->only('store', 'destroy', 'update');
-    Route::resource('/customers', CustomerController::class)->only('store', 'destroy', 'update');
+    
+    Route::post('/customers/{customer}', [CustomerController::class, 'store']);
+    Route::put('/customers/{customer}', [CustomerController::class, 'update']);
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
